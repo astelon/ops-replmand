@@ -1,0 +1,17 @@
+# Copyright (C) 2015 Hewlett Packard Enterprise Development LP
+
+[Unit]
+Description=OpenSwitch ReplMan Daemon
+After=ovsdb-server.service ops-init.service
+
+[Service]
+Type=forking
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=3
+ExecStartPre=/bin/rm -f /var/run/openvswitch/replmand.pid
+ExecStart=/sbin/ip netns exec swns /usr/bin/replmand --detach --pidfile -vSYSLOG:INFO
+PIDFile=/var/run/openvswitch/replmand.pid
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
